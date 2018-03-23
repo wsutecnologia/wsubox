@@ -1,0 +1,80 @@
+---
+- hosts: dc
+  vars:
+    samba_exe: "/usr/local/samba/sbin/samba"
+    samba_version: "4.8.0"
+  tasks:
+  - name: Pacotes Basicos para DC
+    apt: name={{item}} state=installed update_cache=yes
+    with_items:
+         - bind9
+         - ntp
+         - attr 
+         - autoconf 
+         - bind9utils 
+         - bison 
+         - build-essential
+         - debhelper
+         - dnsutils 
+         - docbook-xml
+         - docbook-xsl
+         - flex 
+         - gdb 
+         - libjansson-dev 
+         - krb5-user 
+         - libacl1-dev 
+         - libaio-dev
+         - libarchive-dev 
+         - libattr1-dev 
+         - libblkid-dev 
+         - libbsd-dev 
+         - libcap-dev 
+         - libcups2-dev 
+         - libgnutls28-dev
+         - libgpgme11-dev 
+         - libjson-perl 
+         - libldap2-dev 
+         - libncurses5-dev 
+         - libpam0g-dev 
+         - libparse-yapp-perl 
+         - libpopt-dev
+         - libreadline-dev
+         - nettle-dev
+         - perl 
+         - perl-modules-5.24
+         - pkg-config 
+         - python-all-dev 
+         - python-crypto 
+         - python-dbg 
+         - python-dev 
+         - python-dnspython 
+         - python3-dnspython 
+         - python-gpgme 
+         - python3-gpgme 
+         - python-markdown 
+         - python3-markdown 
+         - python3-dev 
+         - xsltproc
+         - zlib1g-dev
+         - libkrb5-dev
+         - krb5-kdc 
+  - name: Check Samba
+    command: ls {{samba_exe}}
+    register: samba_install
+    ignore_errors: True
+
+  - name: Samba4 Part 1
+    shell: cd /usr/src && wget https://download.samba.org/pub/samba/stable/samba-{{ samba_version }}.tar.gz
+    register: samba_code
+    ignore_errors: True
+    when: samba_install|failed
+  - name: Extract Samba Code
+    shell: cd /usr/src && tar -xf samba-{{samba_version}}.tar.gz
+    register: samba_extract
+    ignore_errors: True
+    when: samba_code|succeeded
+  - name: Samba4 Install Code
+    shell: cd /usr/src/samba-{{samba_version}} && ./configure && make && make install
+    register: samba_installed
+    ignore_errors: True
+    when: samba_extract|succeeded
