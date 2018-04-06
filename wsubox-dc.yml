@@ -3,11 +3,12 @@
   vars:
     samba_exe: "/usr/local/samba/sbin/samba"
     samba_version: "4.8.0"
+    SAMDOM: "buschle"
+    SAMDOMAIN: "buschle.local"
   tasks:
   - name: Pacotes Basicos para DC
     apt: name={{item}} state=installed update_cache=yes
     with_items:
-         - bind9
          - ntp
          - attr 
          - autoconf 
@@ -68,13 +69,69 @@
     register: samba_code
     ignore_errors: True
     when: samba_install|failed
+
   - name: Extract Samba Code
     shell: cd /usr/src && tar -xf samba-{{samba_version}}.tar.gz
     register: samba_extract
     ignore_errors: True
-    when: samba_code|succeeded
+    when: samba_install|failed
+
   - name: Samba4 Install Code
     shell: cd /usr/src/samba-{{samba_version}} && ./configure && make && make install
     register: samba_installed
     ignore_errors: True
-    when: samba_extract|succeeded
+    when: samba_install|failed
+
+  - name: Samba4 Profile
+    shell: ls /etc/profile.d/samba4.sh 
+    register: samba_profile
+    ignore_errors: True
+
+  - name: Samba4 Auto Provision
+    shell: echo "export PATH=/usr/local/samba/bin/:/usr/local/samba/sbin/:$PATH" > /etc/profile.d/samba4.sh  && chmod +x /etc/profile.d/samba4.sh 
+    when: samba_profile|failed
+
+  - name: Samba4 Configure Systemd Part 1
+    copy:
+      src: files-dc/samba-ad-dc.service
+      dest: /etc/systemd/system/samba-ad-dc.service
+
+  - name: Samba4 Configure Systemd Part 2
+    shell: systemctl daemon-reload && systemctl enable samba-ad-dc
+
+  - name: Check Domain provision Samba4
+    shell: egrep -i "active directory" /etc/samba/smb.conf 
+    register: samba_provision
+    ignore_errors: True
+
+  - name: Samba4 Provision Domain Part 1
+    shell: . /etc/profile.d/samba4.sh && samba-tool domain provision --use-rfc2307 --realm {{SAMDOMAIN}} --domain {{SAMDOM}} --server-role dc --adminpass 08-itc-03 --dns-backend SAMBA_INTERNAL && mkdir /etc/samba && ln -s /usr/local/samba/etc/smb.conf /etc/samba/smb.conf
+    when: samba_provision|failed
+  - name: Samba4 Provision Domain Part 2
+    shell: rm -rf /etc/krb5.conf && cp /usr/local/samba/private/krb5.conf /etc/krb5.conf
+    when: samba_provision|failed
+
+  - name: Samba4 NTP Configure Part 1
+    shell: chown root:ntp /usr/local/samba/var/lib/ntp_signd/ && chmod 750 /usr/local/samba/var/lib/ntp_signd/ && rm -Rf /etc/ntp.conf
+    when: samba_provision|failed
+
+  - name: Samba4 NTP Configure Part 2
+    copy:
+      src: files-dc/ntp.conf
+      dest: /etc/ntp.conf
+      mode: 644
+
+  - name: Samba4 Check Libs
+    shell: ls -l /lib/x86_64-linux-gnu/libnss_winbind.so.2
+    register: libwinbind
+    ignore_erros: True
+
+  - name: Samba4 Configure Winbindd Part 1
+    shell: ln -s /usr/local/samba/lib/libnss_winbind.so.2 /lib/x86_64-linux-gnu/libnss_winbind.so.2 && ln -s /lib/x86_64-linux-gnu/libnss_winbind.so.2 /lib/x86_64-linux-gnu/libnss_winbind.so && ldconfig
+    when: libwinbind|failed
+
+  - name: Samba4 Configure Winbindd Part 2
+    copy: 
+      src: files-dc/nsswitch.conf
+      dest: /etc/nsswitch.conf
+      mode: 644

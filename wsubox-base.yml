@@ -1,0 +1,57 @@
+---
+- hosts: monitoramento
+  tasks: 
+  - name: Pacotes Basicos Zabbix Proxy
+    apt: name={{item}} state=installed update_cache=yes
+    with_items:
+         - zabbix-proxy-sqlite3
+         - zabbix-agent
+         - ocsinventory-agent
+         - vim
+         - molly-guard
+
+- hosts: backup
+  tasks:
+  - name: Dep Bareos
+    apt: name={{item}} state=installed update_cache=yes
+    with_items:
+         - libsensors4
+         - postgresql
+         - postgresql-common
+         - postgresql-contrib-9.6 
+         - sysstat
+         - postgresql-9.6
+         - zabbix-agent
+         - ocsinventory-agent
+         - vim
+         - molly-guard
+  - name: Check Repo Bareos
+    shell: ls /etc/apt/sources.list.d/bareos.list
+    register: bareos_repo
+    ignore_errors: True
+
+  - name: Config Repo Bareos
+    shell: echo "deb http://download.bareos.org/bareos/release/17.2/Debian_9.0 /" > /etc/apt/sources.list.d/bareos.list && wget -q http://download.bareos.org/bareos/release/17.2/Debian_9.0/Release.key -O- | apt-key add -
+
+  - name: Install Bareos
+    apt: name={{item}} state=installed update_cache=yes
+    with_items: 
+         - bareos
+         - bareos-database-postgresql
+         - bareos-webui
+  - name: Check Database
+    shell: su postgre -c "psql -l | egrep bareos"
+    register: bareos_db
+    ignore_errors: True
+        
+  - name: Configure Database Bareos Part1
+    shell: su postgre -c /usr/lib/bareos/scripts/create_bareos_database 
+    when: bareos_db|failed
+
+  - name: Configure Database Bareos Part2
+    shell: su postgre -c /usr/lib/bareos/scripts/make_bareos_tables 
+    when: bareos_db|failed
+
+  - name: Configure Database Bareos Part3
+    shell: su postgre -c /usr/lib/bareos/scripts/grant_bareos_privileges
+    when: bareos_db|failed
