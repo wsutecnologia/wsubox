@@ -1,0 +1,363 @@
+    1  mkdir .ssh
+    2  ssh-keygen -f .ssh/id_rsa_ansible
+    3  ssh-add .ssh/id_rsa_ansible
+    4  ls
+    5  vi hosts 
+    6  mv hosts{,-original}
+    7  vi hosts
+    8  vi ansible.cfg 
+    9  ansible all -m ping
+   10  cd .ssh/
+   11  ssh-copy-id -i id_rsa_ansible.pub root@192.168.0.100
+   12  ssh-copy-id -i id_rsa_ansible.pub root@192.168.0.100
+   13  ansible all -m ping
+   14  ansible dc01 -m ping
+   15  cd ..
+   16  ls
+   17  cd roles/
+   18  ls
+   19  cd ..
+   20  ansible -a "/bin/bash echo teste | wall"
+   21  ansible -a "/bin/bash echo teste | wall" dc01
+   22  ansible -a "echo teste | wall" dc01
+   23  ansible -a "echo teste | wall" dc01
+   24  ansible -a "touch /root/teste.txt" dc01
+   25  ls
+   26  vi wsubox.yml
+   27  ansible-playbook wsubox.yml 
+   28  ansible-playbook wsubox.yml 
+   29  vi wsubox.yml 
+   30  ansible-playbook wsubox.yml 
+   31  ls
+   32  vi wsubox.yml 
+   33  vi hosts
+   34  ansible-playbook wsubox.yml 
+   35  vi wsubox.yml 
+   36  ansible-playbook wsubox.yml 
+   37  vi wsubox.yml 
+   38  ansible-playbook wsubox.yml 
+   39  vi wsubox.yml 
+   40  ansible-playbook wsubox.yml 
+   41  vi wsubox.yml 
+   42  ansible-playbook wsubox.yml 
+   43  vi wsubox.retry 
+   44  vi wsubox.yml 
+   45  cd .ssh/
+   46  ssh-copy-id -i id_rsa_ansible.pub root@192.168.0.100
+   47  cd ..
+   48  ls
+   49  ansible-playbook wsubox.yml 
+   50  vi wsubox.yml 
+   51  ansible-playbook wsubox.yml 
+   52  vi wsubox.yml 
+   53  ansible-playbook wsubox.yml 
+   54  vi wsubox.yml 
+   55  ansible-playbook wsubox.yml 
+   56  vi wsubox.yml 
+   57  ansible-playbook wsubox.yml 
+   58  ansible-playbook wsubox.yml 
+   59  vi wsubox.yml 
+   60  ansible-playbook wsubox.yml 
+   61  vi wsubox.yml 
+   62  la
+   63  echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' > /etc/apt/sources.list.d/ansible.list
+   64  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+   65  apt-get update
+   66  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+   67  apt-get install ansible
+   68  cd /etc/ansible/
+   69  ls
+   70  vi ansible.cfg 
+   71  ld
+   72  ls -la
+   73  ssh-agent bash
+   74  apt install git
+   75  cd /etc/ansible/
+   76  ls
+   77  vi wsubox.yml 
+   78  ifco
+   79  ip a
+   80  exit
+   81  ls
+   82  cd /srv/
+   83  ls
+   84  git clone -b master --single-branch https://github.com/wsutecnologia/wsubox.git
+   85  cd wsubox/
+   86  ls
+   87  bash clone_wsubox.sh 
+   88  cd dc/
+   89  ls
+   90  cp /etc/ansible/wsubox.yml .
+   91  ls
+   92  mv wsubox.yml wsubox-dc.yml 
+   93  vi wsubox-dc.yml 
+   94  git commit -am "Provisionamento do DC - Install samba 4.8.0 "
+   95  git add *
+   96  git commit -am "Provisionamento do DC - Install samba 4.8.0 "
+   97  git commit -am "Provisionamento do DC - Install samba 4.8.0 "
+   98  git pusg
+   99  git push
+  100  cd .git/
+  101  ls
+  102  vi config 
+  103  git push
+  104  cd ..
+  105  ls
+  106  cd /etc/ansible/
+  107  ls
+  108  cd /srv/
+  109  ls
+  110  cd wsubox/
+  111  ls
+  112  cd dc/
+  113  ls
+  114  vi wsubox-dc.yml 
+  115  cp wsubox-dc.yml /etc/ansible/
+  116  cd /etc/ansible/
+  117  ansible-playbook -f wsubox-dc.yml 
+  118  ansible-playbook wsubox-dc.yml 
+  119  vi wsubox-dc.yml 
+  120  ansible-playbook wsubox-dc.yml 
+  121  vi wsubox-dc.yml 
+  122  ansible-playbook wsubox-dc.yml 
+  123  vi wsubox-dc.yml 
+  124  ansible-playbook wsubox-dc.yml 
+  125  ls
+  126  mkdir files-dc
+  127  cd files-dc/
+  128  wget --ignore-certificate "https://anonscm.debian.org/gitweb/?p=pkg-samba/samba.git;a=blob_plain;f=debian/samba.samba-ad-dc.init;h=3132d2e367675f822342a5b7bc2e50c046aa3b8f;hb=HEAD" -O samba-ad-dc
+  129  wget --ignore-certificates "https://anonscm.debian.org/gitweb/?p=pkg-samba/samba.git;a=blob_plain;f=debian/samba.samba-ad-dc.init;h=3132d2e367675f822342a5b7bc2e50c046aa3b8f;hb=HEAD" -O samba-ad-dc
+  130  man wget
+  131  wget --no-check-certificate "https://anonscm.debian.org/gitweb/?p=pkg-samba/samba.git;a=blob_plain;f=debian/samba.samba-ad-dc.init;h=3132d2e367675f822342a5b7bc2e50c046aa3b8f;hb=HEAD" -O samba-ad-dc
+  132  ls
+  133  cd ..
+  134  ls
+  135  vi wsubox-dc.yml 
+  136  ansible-playbook wsubox-dc.yml 
+  137  ansible-playbook wsubox-dc.yml 
+  138  ls
+  139  vi wsubox-dc.
+  140  vi wsubox-dc.yml 
+  141  ansible-playbook wsubox-dc.yml 
+  142  vi wsubox-dc.yml 
+  143  ansible-playbook wsubox-dc.yml 
+  144  vi wsubox-dc.yml 
+  145  ansible-playbook wsubox-dc.yml 
+  146  vi wsubox-dc.yml 
+  147  ansible-playbook wsubox-dc.yml 
+  148  vi wsubox-dc.yml 
+  149  ansible-playbook wsubox-dc.yml 
+  150  vi wsubox-dc.yml 
+  151  ansible-playbook wsubox-dc.yml 
+  152  ansible-playbook wsubox-dc.yml 
+  153  vi wsubox-dc.yml 
+  154  ansible-playbook wsubox-dc.yml 
+  155  cd files-dc/
+  156  ls
+  157  vi samba-ad-dc.service
+  158  cd ..
+  159  ls
+  160  vi wsubox-dc.
+  161  vi wsubox-dc.yml 
+  162  ansible-playbook wsubox-dc.yml 
+  163  vi wsubox-dc.yml 
+  164  ansible-playbook wsubox-dc.yml 
+  165  vi wsubox-dc.yml 
+  166  ansible-playbook wsubox-dc.yml 
+  167  ls
+  168  vi wsubox-dc.yml 
+  169  vi wsubox-dc.yml 
+  170  vi files-dc/ntp.conf
+  171  vi wsubox-dc.yml 
+  172  ansible-playbook wsubox-dc.yml 
+  173  ansible-playbook wsubox-dc.yml 
+  174  cd .ssh/
+  175  ls
+  176  ssh-copy-id -i id_rsa_ansible.pub root@192.168.0.100
+  177  ansible-playbook wsubox-dc.yml 
+  178  cd ..
+  179  ansible-playbook wsubox-dc.yml 
+  180  vi wsubox-dc.yml 
+  181  ansible-playbook wsubox-dc.yml 
+  182  vi wsubox-dc.yml 
+  183  ansible-playbook wsubox-dc.yml 
+  184  cd files-dc/
+  185  ls
+  186  vi nsswitch.conf
+  187  cd ..
+  188  ansible-playbook wsubox-dc.yml 
+  189  vi nsswitch.conf
+  190  ls
+  191  cd files-dc/
+  192  ls
+  193  vi nsswitch.conf 
+  194  cd ..
+  195  vi ansible.cfg 
+  196  vi wsubox-dc.
+  197  vi wsubox-dc.yml 
+  198  ansible-playbook wsubox-dc.yml 
+  199  vi wsubox-dc.yml 
+  200  ansible-playbook wsubox-dc.yml 
+  201  vi wsubox-dc.yml 
+  202  ansible-playbook wsubox-dc.yml 
+  203  cd /etc/ansible/
+  204  ls
+  205  vi wsubox-dc.yml 
+  206  ls
+  207  vi /etc/resolv.conf 
+  208  ls
+  209  cd .ssh/
+  210  ssh-copy-id -i id_rsa_ansible.pub root@backup
+  211  ssh-copy-id -i id_rsa_ansible.pub root@backup.buschle.local
+  212  host backup
+  213  ping 192.168.0.101
+  214  ssh-copy-id -i id_rsa_ansible.pub root@backup.buschle.local
+  215  ssh-copy-id -i id_rsa_ansible.pub root@backup.buschle.local
+  216  ssh-copy-id -i id_rsa_ansible.pub root@backup.buschle.local
+  217  ssh-copy-id -i id_rsa_ansible.pub root@backup.buschle.local
+  218  ssh backup
+  219  ssh backup
+  220  host backup
+  221  ssh-copy-id -i id_rsa_ansible.pub root@backup.buschle.local
+  222  ssh-copy-id -i id_rsa_ansible.pub root@backup.buschle.local
+  223  ssh-copy-id -i id_rsa_ansible.pub root@backup.buschle.local
+  224  ssh 192.168.0.101
+  225  ssh 192.168.0.101
+  226  ssh 192.168.0.101
+  227  ssh-copy-id -i id_rsa_ansible.pub root@backup.buschle.local
+  228  ssh-keygen -f "/root/.ssh/known_hosts" -R backup.buschle.local
+  229  ssh-copy-id -i id_rsa_ansible.pub root@backup.buschle.local
+  230  ssh-copy-id -i id_rsa_ansible.pub root@inventario.buschle.local
+  231  host inventario.buschle.local
+  232  ssh-copy-id -i id_rsa_ansible.pub root@inventario.buschle.local
+  233  ssh-copy-id -i id_rsa_ansible.pub root@inventario.buschle.local
+  234  ssh-copy-id -i id_rsa_ansible.pub root@monitor.buschle.local
+  235  ssh-copy-id -i id_rsa_ansible.pub root@monitor.buschle.local
+  236  ssh-copy-id -i id_rsa_ansible.pub root@monitor.buschle.local
+  237  host monitor
+  238  host inventario
+  239  host monitor
+  240  host backup
+  241  ssh-copy-id -i id_rsa_ansible.pub root@monitor.buschle.local
+  242  ssh-copy-id -i id_rsa_ansible.pub root@inventario.buschle.local
+  243  ssh-keygen -f "/root/.ssh/known_hosts" -R inventario.buschle.local
+  244  ssh-keygen -f "/root/.ssh/known_hosts" -R inventario.buschle.local
+  245  ssh-keygen -f "/root/.ssh/known_hosts" -R inventario.buschle.local
+  246  ssh-copy-id -i id_rsa_ansible.pub root@inventario.buschle.local
+  247  ls
+  248  cd ..
+  249  ls
+  250  vi wsubox.yml 
+  251  vi hosts-wsubox
+  252  cp hosts hosts-wsubox
+  253  vi hosts-wsubox 
+  254  vi hosts-wsubox
+  255  ls
+  256  ls
+  257  mkdir files-wsubox
+  258  cd files-wsubox/
+  259  ls
+  260  cd ..
+  261  ls
+  262  vi wsubox.yml
+  263  vi hosts-wsubox 
+  264  ansible-playbook -i hosts-wsubox wsubox.yml 
+  265  vi hosts-wsubox 
+  266  vi wsubox.yml 
+  267  ansible-playbook -i hosts-wsubox wsubox.yml 
+  268  vi wsubox.yml 
+  269  ansible-playbook -i hosts-wsubox wsubox.yml 
+  270  ansible-playbook -i hosts-wsubox wsubox.yml 
+  271  vi wsubox.yml 
+  272  ansible-playbook -i hosts-wsubox wsubox.yml 
+  273  ssh backup.bushcle.local
+  274  ssh backup.buschle.local
+  275  ssh backup.buschle.local
+  276  vi /root/.ssh/known_hosts
+  277  ssh backup.buschle.local
+  278  ls
+  279  vi /root/.ssh/known_hosts
+  280  vi wsubox.yml 
+  281  ansible-playbook -i hosts-wsubox wsubox.yml 
+  282  vi wsubox.yml 
+  283  ansible-playbook -i hosts-wsubox wsubox.yml 
+  284  vi wsubox.yml 
+  285  ansible-playbook -i hosts-wsubox wsubox.yml 
+  286  vi wsubox.yml 
+  287  ansible-playbook -i hosts-wsubox wsubox.yml 
+  288  vi wsubox.yml 
+  289  ansible-playbook -i hosts-wsubox wsubox.yml 
+  290  vi wsubox.yml 
+  291  ansible-playbook -i hosts-wsubox wsubox.yml 
+  292  ls
+  293  vi wsubox.retry 
+  294  mv wsubox.yml wsubox-base.yml
+  295  ansible-playbook -i hosts-wsubox wsubox-base.yml 
+  296  mv wsubox.yml wsubox-base.yml
+  297  vi wsubox.retry 
+  298  vi wsubox-base.yml 
+  299  rm -Rf wsubox.retry 
+  300  ansible-playbook -i hosts-wsubox wsubox-base.yml 
+  301  vi wsubox-base.yml 
+  302  ansible-playbook -i hosts-wsubox wsubox-base.yml  -d 1
+  303  ansible-playbook -h
+  304  ansible-playbook -i hosts-wsubox wsubox-base.yml  -vvvvv
+  305  vi wsubox-base.yml 
+  306  ansible-playbook -i hosts-wsubox wsubox-base.yml  -v
+  307  vi wsubox-base.yml 
+  308  ansible-playbook -i hosts-wsubox wsubox-base.yml  -v
+  309  vi wsubox-base.yml 
+  310  ansible-playbook -i hosts-wsubox wsubox-base.yml  -v
+  311  vi wsubox-base.yml 
+  312  ansible-playbook -i hosts-wsubox wsubox-base.yml  -v
+  313  ansible-playbook -i hosts-wsubox wsubox-base.yml  -v
+  314  vi wsubox-base.yml 
+  315  ansible-playbook -i hosts-wsubox wsubox-base.yml  
+  316  ansible-playbook -i hosts-wsubox wsubox-base.yml  
+  317  vi wsubox-base.yml 
+  318  ansible-playbook -i hosts-wsubox wsubox-base.yml  
+  319  vi wsubox-base.yml 
+  320  vi wsubox-dc.
+  321  vi wsubox-dc.yml 
+  322  vi wsubox-base.yml 
+  323  ansible-playbook -i hosts-wsubox wsubox-base.yml  
+  324  vi wsubox-base.yml 
+  325  ansible-playbook -i hosts-wsubox wsubox-base.yml  
+  326  vi wsubox-base.yml 
+  327  ansible-playbook -i hosts-wsubox wsubox-base.yml  
+  328  ansible-playbook -i hosts-wsubox wsubox-base.yml  -vvv
+  329  vi wsubox-base.yml 
+  330  ansible-playbook -i hosts-wsubox wsubox-base.yml  -vvv
+  331  ansible-playbook -i hosts-wsubox wsubox-base.yml  
+  332  hostname
+  333  apt-cache search ocs
+  334  apt-get install ocsinventory-agent
+  335  ip a
+  336  cd /srv/wsubox/
+  337  ls
+  338  cd dc/
+  339  git pull
+  340  ls
+  341  ls /etc/ansible/
+  342  vi /etc/ansible/wsubox-dc.yml 
+  343  ls
+  344  rm -rf wsubox-dc.yml 
+  345  cp /etc/ansible/wsubox-dc.yml .
+  346  cp -Rpf /etc/ansible/* .
+  347  l s-l
+  348   ls -l 
+  349  ls -l a
+  350  ls -la
+  351  cp -Rpf /etc/ansible/.ssh/ .
+  352  ls -l
+  353   ls -l
+  354  ls -l a
+  355  ls -l 
+  356  ls -l a
+  357  ls -la
+  358  git add *
+  359  git commit -am "Arquivos"
+  360  git push
+  361  exit
+  362  history 
+  363  history > /srv/wsubox/dc/historico.txt
