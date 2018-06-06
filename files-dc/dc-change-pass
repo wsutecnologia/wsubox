@@ -1,0 +1,16 @@
+#!/bin/bash
+userOU="ou=Usuarios"
+DbFILE="/usr/local/samba/private/sam.ldb"
+Domain="__BASEDC__"
+if [ $# -lt 1 ]
+then
+	echo "$0 <nome do usuario>"
+else
+	GE=`ldbsearch -H $DbFILE -b $userOU,$Domain cn=$1 | egrep ^cn | wc -l`
+	if [ $GE -ne 0 ]
+	then
+		samba-tool user setpassword $1
+	else
+		echo "$1 não existe existe"
+	fi
+fi

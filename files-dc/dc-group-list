@@ -1,0 +1,5 @@
+#!/bin/bash
+GroupOU="ou=Grupos"
+DbFILE="/usr/local/samba/private/sam.ldb"
+Domain="__BASEDC__"
+ldbsearch -H $DbFILE -b $GroupOU,$Domain cn | egrep ^cn | awk '{ print $ 2 }'

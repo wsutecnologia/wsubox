@@ -1,0 +1,17 @@
+#!/bin/bash
+GroupOU="ou=Grupos"
+DbFILE="/usr/local/samba/private/sam.ldb"
+Domain="__BASEDC__"
+
+if [ -z $1 ]
+then
+	echo "$0 <nome do grupo>"
+else
+	GE=`/usr/local/samba/bin/ldbsearch -H $DbFILE -b $GroupOU,$Domain cn=$1 | egrep ^cn | wc -l`
+	if [ $GE -ne 0 ]
+	then
+		samba-tool group listmembers $1
+	else
+		echo "$1 não existe"
+	fi
+fi

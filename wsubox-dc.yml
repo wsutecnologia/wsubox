@@ -3,8 +3,9 @@
   vars:
     samba_exe: "/usr/local/samba/sbin/samba"
     samba_version: "4.8.0"
-    SAMDOM: "buschle"
-    SAMDOMAIN: "buschle.local"
+    SAMDOM: "<dominio aqui>"
+    SAMDOMAIN: "<realm aqui>"
+    ADMPASS: "<pass administrator>"
   tasks:
   - name: Pacotes Basicos para DC
     apt: name={{item}} state=installed update_cache=yes
@@ -105,7 +106,7 @@
     ignore_errors: True
 
   - name: Samba4 Provision Domain Part 1
-    shell: . /etc/profile.d/samba4.sh && samba-tool domain provision --use-rfc2307 --realm {{SAMDOMAIN}} --domain {{SAMDOM}} --server-role dc --adminpass 08-itc-03 --dns-backend SAMBA_INTERNAL && mkdir /etc/samba && ln -s /usr/local/samba/etc/smb.conf /etc/samba/smb.conf
+    shell: . /etc/profile.d/samba4.sh && samba-tool domain provision --use-rfc2307 --realm {{SAMDOMAIN}} --domain {{SAMDOM}} --server-role dc --adminpass {{ADMPASS}} --dns-backend SAMBA_INTERNAL && mkdir /etc/samba && ln -s /usr/local/samba/etc/smb.conf /etc/samba/smb.conf
     when: samba_provision|failed
   - name: Samba4 Provision Domain Part 2
     shell: rm -rf /etc/krb5.conf && cp /usr/local/samba/private/krb5.conf /etc/krb5.conf
@@ -127,7 +128,7 @@
     ignore_erros: True
 
   - name: Samba4 Configure Winbindd Part 1
-    shell: ln -s /usr/local/samba/lib/libnss_winbind.so.2 /lib/x86_64-linux-gnu/libnss_winbind.so.2 && ln -s /lib/x86_64-linux-gnu/libnss_winbind.so.2 /lib/x86_64-linux-gnu/libnss_winbind.so && ldconfig
+    shell: ln -sf /usr/local/samba/lib/libnss_winbind.so.2 /lib/x86_64-linux-gnu/libnss_winbind.so.2 && ln -sf /lib/x86_64-linux-gnu/libnss_winbind.so.2 /lib/x86_64-linux-gnu/libnss_winbind.so && ldconfig
     when: libwinbind|failed
 
   - name: Samba4 Configure Winbindd Part 2

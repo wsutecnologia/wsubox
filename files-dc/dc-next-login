@@ -1,0 +1,19 @@
+#!/bin/bash
+userOU="ou=Usuarios"
+DbFILE="/usr/local/samba/private/sam.ldb"
+Domain="_BASEDC__"
+if [ $# -lt 1 ]
+then
+	echo "$0 <nome do usuario>"
+else
+	GE=`ldbsearch -H $DbFILE -b $userOU,$Domain cn=$1 | egrep ^cn | wc -l`
+	if [ $GE -ne 0 ]
+	then
+		
+		PASS="#`tail -1 /var/log/syslog | md5sum | awk '{ print $ 1 }' | rev | cut -c 3-13`%"
+		samba-tool user setpassword --newpassword="$PASS" --must-change-at-next-login $1
+		echo "A senha de $1 foi alterada para $PASS e será solicitado para alterar no próximo login."
+	else
+		echo "$1 não existe existe"
+	fi
+fi

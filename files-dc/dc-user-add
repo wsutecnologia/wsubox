@@ -1,0 +1,48 @@
+#!/bin/bash
+userOU="ou=Usuarios"
+groupOU="ou=Grupos"
+DbFILE="/usr/local/samba/private/sam.ldb"
+Domain="_BASEDC__"
+SAMDOM="__SAMDOM__"
+NetLOGON="/srv/dc01/netlogon"
+UserPASS="Mudar@123"
+
+if [ $# -lt 1 ]
+then
+	echo "$0 <nome do usuario>"
+else
+	GE=`ldbsearch -H $DbFILE -b $userOU,$Domain cn=$1 | egrep ^cn | wc -l`
+	if [ $GE -ne 1 ]
+	then
+		GidNUMBER=`ldbsearch -H $DbFILE -b $groupOU,$Domain  cn=$2 gidnumber | egrep ^gid | awk '{ print $ 2 }'`
+		if [ -z $GidNUMBER ]
+		then
+			GidNUMBER=5001
+		fi
+		LastUID=`ldbsearch -H $DbFILE -b $userOU,$Domain  uidnumber | egrep -i uidnum | awk '{ print $ 2 }' | sort -n | tail -1`
+
+		if [ -z $LastUID ]
+		then
+			LastUID=5000
+		fi
+		NextUID=$((${LastUID}+1))
+		samba-tool user create $1 --userou=$userOU --nis-domain=$SAMDOM --gid-number=$GidNUMBER --script-path=$NetLOGON/$1.bat --home-drive=U --home-directory=/home/`echo $1 | cut -c 1`/$1 --nis-domain=$SAMDOM --unix-home=/home/`echo $1 | cut -c 1`/$1 --uid=$1 --uid-number=$NextUID --login-shell=/bin/bash --random-password
+			
+		GRUPO=`ldbsearch -H $DbFILE -b $groupOU,$Domain gidnumber=$GidNUMBER cn | egrep ^cn | awk '{ print $ 2 }'`
+		if [ $GRUPO == cloud ]
+		then
+			echo "$2 Não existe"
+		else
+			samba-tool group addmembers $GRUPO $1
+		fi
+		samba-tool user setpassword $1 --newpassword=$UserPASS
+		mkdir -p /home/`echo $1 | cut -c 1`/$1 
+		chmod 770 /home/`echo $1 | cut -c 1`/$1
+		chown $1 /home/`echo $1 | cut -c 1`/$1
+		echo -e "@echo off\nnet use w: \\\\\\dc01\dados\nnet use g: \\\\\\dc01\gdt\nnet use t: \\\\\dc01\\\temp" > $NetLOGON/$1.bat
+		chmod +x $NetLOGON/$1.bat
+	
+	else
+		echo "$1 já existe"
+	fi
+fi
