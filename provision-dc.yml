@@ -1,0 +1,70 @@
+---
+- hosts: dc
+  tasks:
+  - name: Check Domain provision Samba4
+    shell: egrep -i "active directory" /etc/samba/smb.conf 
+    register: samba_provision
+    ignore_errors: True
+
+  - name: Samba4 Provision Domain Part 1
+    shell: . /etc/profile.d/samba4.sh && samba-tool domain provision --use-rfc2307 --realm {{SAM}} --domain={{SAMDOM}} --server-role dc --adminpass={{ADMPASS}} --dns-backend=BIND9_DLZ  && mkdir /etc/samba && ln -s /usr/local/samba/etc/smb.conf /etc/samba/smb.conf
+    when: samba_provision|failed
+  - name: Samba4 Provision Domain Part 2
+    shell: rm -rf /etc/krb5.conf && cp /usr/local/samba/private/krb5.conf /etc/krb5.conf
+    when: samba_provision|failed
+
+  - name: Samba4 NTP Configure Part 1
+    shell: chown root:ntp /usr/local/samba/var/lib/ntp_signd/ && chmod 750 /usr/local/samba/var/lib/ntp_signd/ && rm -Rf /etc/ntp.conf
+    when: samba_provision|failed
+
+  - name: Samba4 NTP Configure Part 2
+    copy:
+      src: files-dc/ntp.conf
+      dest: /etc/ntp.conf
+      mode: 0644
+
+  - name: Samba4 Configure Winbindd Part 1
+    shell: ln -sf /usr/local/samba/lib/libnss_winbind.so.2 /lib/x86_64-linux-gnu/libnss_winbind.so.2 && ln -sf /lib/x86_64-linux-gnu/libnss_winbind.so.2 /lib/x86_64-linux-gnu/libnss_winbind.so && ldconfig
+
+  - name: Samba4 Configure Winbindd Part 2
+    copy: 
+      src: files-dc/nsswitch.conf
+      dest: /etc/nsswitch.conf
+      mode: 0644
+
+  - name: Samba4 Configure Bind9  Part 1
+    copy:
+      src: files-dc/named-private.conf
+      dest: /usr/local/samba/bind-dns/named.conf
+      mode: 0644
+      owner: bind
+  - name: Samba4 Configure Bind9 Part 2
+    copy:
+      src: files-dc/named.conf
+      dest: /etc/bind/named.conf
+      mode: 0644
+      owner: bind
+  - name: Samba4 Configure Bind9 Part 3
+    copy:
+      src: files-dc/named.conf.options
+      dest: /etc/bind/named.conf.options
+      mode: 0644
+      owner: bind
+  - name: Samba4 Configure Bind9 Part 4
+    copy:
+      src: files-dc/resolv.conf
+      dest: /etc/resolv.conf
+      mode: 0644
+      owner: root
+  - name: Samba4 Configure Bind9 Part 5
+    shell: sed -i "s/__DOMAIN__/{{SAM}}/g" /etc/resolv.conf
+  - name: Samba4 Configure Bind9 Part 5 
+    shell: chown -R bind /usr/local/samba/bind-dns
+
+  - name: Samba4 Configure Bind9 Part 6
+    shell: service bind9 restart
+
+  - name: Samba4 Start Samba4 ;)
+    shell: service samba-ad-dc start
+
+

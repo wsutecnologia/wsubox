@@ -2,10 +2,14 @@
 - hosts: dc
   vars:
     samba_exe: "/usr/local/samba/sbin/samba"
+<<<<<<< HEAD
     samba_version: "4.8.0"
     SAMDOM: "<dominio aqui>"
     SAMDOMAIN: "<realm aqui>"
     ADMPASS: "<pass administrator>"
+=======
+    samba_version: "4.8.1"
+>>>>>>> 95025e5061e1b9a1d62bd5fd7bae09d3ab1ce43d
   tasks:
   - name: Pacotes Basicos para DC
     apt: name={{item}} state=installed update_cache=yes
@@ -13,6 +17,7 @@
          - ntp
          - attr 
          - autoconf 
+         - bind9
          - bind9utils 
          - bison 
          - build-essential
@@ -99,6 +104,7 @@
 
   - name: Samba4 Configure Systemd Part 2
     shell: systemctl daemon-reload && systemctl enable samba-ad-dc
+<<<<<<< HEAD
 
   - name: Check Domain provision Samba4
     shell: egrep -i "active directory" /etc/samba/smb.conf 
@@ -136,3 +142,5 @@
       src: files-dc/nsswitch.conf
       dest: /etc/nsswitch.conf
       mode: 644
+=======
+>>>>>>> 95025e5061e1b9a1d62bd5fd7bae09d3ab1ce43d
