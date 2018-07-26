@@ -1,6 +1,6 @@
 #!/bin/bash
-BUCKETNAME="bkp-noruega-dados"
-REPOSITORIOLOCAL="/mnt/backup"
+BUCKETNAME="__BucketName__"
+REPOSITORIOLOCAL="__DirLocal__"
 ANO=`date +%Y`
 MES=`date +%m`
 DIA=`date +%d --date " 1 day ago "`

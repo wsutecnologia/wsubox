@@ -1,6 +1,6 @@
 #!/bin/bash
-BUCKETNAME="bkp-noruega-dados"
-REPLOCAL="/mnt/backup/restore"
+BUCKETNAME="__BucketName__"
+REPLOCAL="__DirLocal__"
 if [ -z $1 ]
 then
 	echo "$0 <file name>"
