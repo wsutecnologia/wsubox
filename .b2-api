@@ -1,0 +1,4 @@
+#!/bin/bash
+B2ID=07a368bc6aa7
+B2KEY=001179a13e114e569459d19d6ccad25be1cee7b7ae
+b2 authorize-account $B2ID $B2KEY
